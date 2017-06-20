@@ -37,11 +37,15 @@ var Location = function(data, map) {
   $.ajax({
     url: wikiUrl + data.title,
     dataType: 'jsonp'
-  }).done(function(result) {
-    self.info = '<h3>' + self.title() + '</h3>' + '<p>' + result[2][0] + '</p><p><a href=' + result[3][0] + ' target="blank">Read more on Wikipedia</a><p>';
-  }).fail(function(){
-    alert("Can't get info from Wikipedia =(");
-  });
+  })
+    .done(function(result) {
+      if(result[1].length > 0) {
+      self.info = '<h3>' + self.title() + '</h3>' + '<p>' + result[2][0] + '</p><p><a href=' + result[3][0] + ' target="blank">Read more on Wikipedia</a><p>';
+      }
+    })
+    .fail(function(){
+      alert("Failed to get Wikipedia resources :(");
+    });
 };
 
 // input value for filter
@@ -109,14 +113,18 @@ var ViewModel = function() {
       loc.marker.setAnimation(google.maps.Animation.BOUNCE);
       setTimeout(function(){
         loc.marker.setAnimation(null);
-      }, 500);
+      }, 700);
     } else {
       loc.marker.setAnimation(null);
     }
     // show infoWindow
     if(infoWindow.marker != loc.marker) {
       infoWindow.marker = loc.marker;
-      infoWindow.setContent(loc.info);
+      if (loc.info) {
+        infoWindow.setContent(loc.info);
+      } else {
+        infoWindow.setContent('<p>No information on Wikipedia.<p>');
+      }
       infoWindow.open(map, loc.marker);
     }
   };
@@ -125,4 +133,9 @@ var ViewModel = function() {
 // Google map api callback
 function initMap() {
   ko.applyBindings(new ViewModel());
+}
+
+// Google map api error handling
+function googleMapError() {
+  alert('Failed to get Google Map resources :(');
 }
