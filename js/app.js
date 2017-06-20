@@ -20,7 +20,7 @@ var initLocations = [
     title: 'New York University Libraries',
     coordinates: {lat: 40.729427, lng: -73.997194}
   }
-]
+];
 
 // wikipedia api request url
 var wikiUrl = 'https://en.wikipedia.org/w/api.php?action=opensearch&format=json&limit=1&search=';
@@ -42,7 +42,7 @@ var Location = function(data, map) {
   }).fail(function(){
     alert("Can't get info from Wikipedia =(");
   });
-}
+};
 
 // input value for filter
 var searchString = ko.observable('');
@@ -62,7 +62,7 @@ var ViewModel = function() {
   this.locationList = ko.observableArray([]);
   initLocations.forEach(function(item){
     self.locationList.push(new Location(item));
-  })
+  });
 
   // initial markers and map bounds
   var bounds = new google.maps.LatLngBounds();
@@ -100,12 +100,12 @@ var ViewModel = function() {
     google.maps.event.addListener(loc.marker, 'click', function () {
       self.clickLocation(loc);
     });
-  })
+  });
 
   // show animation and infoWindow when click on location list or markers
   this.clickLocation = function(loc){
     // add marker animation;
-    if (loc.marker.getAnimation() == null) {
+    if (loc.marker.getAnimation() === null) {
       loc.marker.setAnimation(google.maps.Animation.BOUNCE);
       setTimeout(function(){
         loc.marker.setAnimation(null);
@@ -119,8 +119,8 @@ var ViewModel = function() {
       infoWindow.setContent(loc.info);
       infoWindow.open(map, loc.marker);
     }
-  }
-} // viewModel
+  };
+}; // viewModel
 
 // Google map api callback
 function initMap() {
