@@ -125,4 +125,4 @@ var ViewModel = function() {
 // Google map api callback
 function initMap() {
   ko.applyBindings(new ViewModel());
-}
+};
